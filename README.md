@@ -1,2 +1,2 @@
 # heat-templates
-OpenStack Heat Templates
+Template files for OpenStack Heat orchestration.
