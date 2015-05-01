@@ -25,9 +25,7 @@ resources:
     properties:
       name: heat-subnet-01
       cidr: 10.10.10.0/24
-      dns_nameservers: [172.16.1.11, 172.16.1.6]
       enable_dhcp: true
-      gateway_ip: 10.10.10.254
       network_id: { get_resource: heat_network_01 }
 
   instance0_port0:
