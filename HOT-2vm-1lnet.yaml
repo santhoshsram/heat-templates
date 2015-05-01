@@ -3,6 +3,8 @@ heat_template_version: 2013-05-23
 description: >
   A simple Heat template that spins up 2 instances and a private network.
 
+# Create command: heat stack-create <stack-name> --template-file=/home/santhoshs/heat-templates/HOT-2vm-1lnet.yaml --parameters="flavor_name=<flavor-name>;image_name=<image-name>"
+
 parameters:
   flavor_name:
     type: string
