@@ -1,0 +1,63 @@
+heat_template_version: 2013-05-23
+
+description: >
+  A simple Heat template that spins up 2 instances and a private network.
+
+parameters:
+  flavor_name:
+    type: string
+    label: flavor name
+    description: Name of the flavor to be used for the instances.
+  image_name:
+    type: string
+    label: image name
+    description: Name of the image from which to create the instances..
+
+resources:
+  heat_network_01:
+    type: OS::Neutron::Net
+    properties:
+      admin_state_up: true
+      name: heat-network-01
+
+  heat_subnet_01:
+    type: OS::Neutron::Subnet
+    properties:
+      name: heat-subnet-01
+      cidr: 10.10.10.0/24
+      dns_nameservers: [172.16.1.11, 172.16.1.6]
+      enable_dhcp: true
+      gateway_ip: 10.10.10.254
+      network_id: { get_resource: heat_network_01 }
+
+  instance0_port0:
+    type: OS::Neutron::Port
+    properties:
+      admin_state_up: true
+      network_id: { get_resource: heat_network_01 }
+      security_groups:
+        - default
+  instance1_port0:
+    type: OS::Neutron::Port
+    properties:
+      admin_state_up: true
+      network_id: { get_resource: heat_network_01 }
+      security_groups:
+        - default
+
+  instance0:
+    type: OS::Nova::Server
+    properties:
+      name: heat-instance-01
+      image: { get_param: image_name }
+      flavor:  { get_param: flavor_name }
+      networks:
+        - port: { get_resource: instance0_port0 }
+  instance1:
+    type: OS::Nova::Server
+    properties:
+      name: heat-instance-02
+      image: { get_param: image_name }
+      flavor:  { get_param: flavor_name }
+      networks:
+        - port: { get_resource: instance1_port0 }
