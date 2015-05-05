@@ -16,48 +16,56 @@ parameters:
     description: Name of the image from which to create the instances..
 
 resources:
-  heat_network_01:
+  lnet_1:
     type: OS::Neutron::Net
     properties:
       admin_state_up: true
-      name: heat-network-01
+      name: lnet_1
 
-  heat_subnet_01:
+  subnet_1:
     type: OS::Neutron::Subnet
     properties:
-      name: heat-subnet-01
+      name: subnet_1
       cidr: 10.10.10.0/24
       enable_dhcp: true
-      network_id: { get_resource: heat_network_01 }
+      network_id: { get_resource: lnet_1 }
 
-  instance0_port0:
+  instance1_port1:
     type: OS::Neutron::Port
     properties:
       admin_state_up: true
-      network_id: { get_resource: heat_network_01 }
+      network_id: { get_resource: lnet_1 }
       security_groups:
         - default
-  instance1_port0:
+  instance2_port1:
     type: OS::Neutron::Port
     properties:
       admin_state_up: true
-      network_id: { get_resource: heat_network_01 }
+      network_id: { get_resource: lnet_1 }
       security_groups:
         - default
 
-  instance0:
-    type: OS::Nova::Server
-    properties:
-      name: heat-instance-01
-      image: { get_param: image_name }
-      flavor:  { get_param: flavor_name }
-      networks:
-        - port: { get_resource: instance0_port0 }
   instance1:
     type: OS::Nova::Server
     properties:
-      name: heat-instance-02
+      name: instance_1
       image: { get_param: image_name }
       flavor:  { get_param: flavor_name }
       networks:
-        - port: { get_resource: instance1_port0 }
+        - port: { get_resource: instance1_port1 }
+  instance2:
+    type: OS::Nova::Server
+    properties:
+      name: instance_2
+      image: { get_param: image_name }
+      flavor:  { get_param: flavor_name }
+      networks:
+        - port: { get_resource: instance2_port1 }
+
+outputs:
+   instance1_ip:
+      description: Fixed IP address of instance1 on the private network.
+      value: { get_attr: [ instance1, first_address] }
+   instance2_ip:
+      description: Fixed IP address of instance2 on the private network.
+      value: { get_attr: [ instance2, first_address] }
