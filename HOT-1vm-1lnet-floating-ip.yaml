@@ -18,7 +18,7 @@ parameters:
   ext_net_id:
     type: string
     label: external network id
-    description: ID of the external network to which the private network should be uplinked..
+    description: ID of the external network to which the private network should be uplinked.
 
 resources:
    lnet_1:
