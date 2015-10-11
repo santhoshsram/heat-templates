@@ -1,0 +1,31 @@
+heat_template_version: 2013-05-23
+
+description: Simple template to deploy 100 compute instances
+
+parameters:
+  image_name:
+    type: string
+    label: Image Name
+    description: Image to be used for compute instance
+    default: ubuntu-12.04-x86_32-vmtools
+  instance_type:
+    type: string
+    label: Instance Type
+    description: Type of instance (flavor) to be used
+    default: tiny
+  instance_count:
+    type: number
+    label: Number of Instances
+    description: Number of instances to be created
+    default: 100
+
+resources:
+  my-instances:
+    type: OS::Heat::ResourceGroup
+    properties:
+      count: { get_param: instance_count }
+      resource_def:
+        type: OS::Nova::Server
+        properties:
+          image: { get_param: image_name }
+          flavor: { get_param: instance_type }
